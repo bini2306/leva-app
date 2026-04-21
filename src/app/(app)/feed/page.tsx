@@ -22,24 +22,24 @@ export default async function FeedPage() {
   const enriched: FeedVideo[] = [];
 
   for (const v of videos ?? []) {
-    const [{ data: profile }, { data: playerProfile }, { data: signed }] =
-      await Promise.all([
-        supabase.from("profiles").select("*").eq("id", v.player_id).single(),
-        supabase
-          .from("player_profiles")
-          .select("*")
-          .eq("id", v.player_id)
-          .single(),
-        supabase.storage.from("videos").createSignedUrl(v.video_url, 3600),
-      ]);
+    const [{ data: profile }, { data: playerProfile }] = await Promise.all([
+      supabase.from("profiles").select("*").eq("id", v.player_id).single(),
+      supabase
+        .from("player_profiles")
+        .select("*")
+        .eq("id", v.player_id)
+        .single(),
+    ]);
 
-    if (!signed?.signedUrl) continue;
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("videos").getPublicUrl(v.video_url);
 
     enriched.push({
       id: v.id,
       title: v.title,
       description: v.description,
-      videoUrl: signed.signedUrl,
+      videoUrl: publicUrl,
       playerName: profile?.full_name ?? "giocatore",
       isVerified: playerProfile?.is_verified ?? false,
     });
