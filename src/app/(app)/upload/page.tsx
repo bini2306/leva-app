@@ -1,38 +1,98 @@
 "use client";
 
-import { useActionState, useState } from "react";
-import { useFormStatus } from "react-dom";
+import { useState } from "react";
 import Link from "next/link";
-import { uploadVideo, type UploadState } from "@/app/actions/videos";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { saveVideoRecord } from "@/app/actions/videos";
 
-function SubmitButton({ disabled }: { disabled: boolean }) {
-  const { pending } = useFormStatus();
-  return (
-    <button
-      type="submit"
-      disabled={pending || disabled}
-      className="w-full py-3.5 bg-green-500 hover:bg-green-400 disabled:opacity-40 disabled:cursor-not-allowed text-black font-bold rounded-xl transition-colors"
-    >
-      {pending ? "Caricamento in corso…" : "Pubblica"}
-    </button>
-  );
-}
+const MAX_SIZE = 100 * 1024 * 1024;
 
 export default function UploadPage() {
-  const [state, action] = useActionState<UploadState, FormData>(
-    uploadVideo,
-    null
-  );
+  const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-
-  const error = state && "error" in state ? state.error : null;
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] ?? null;
+    setError(null);
+    if (f && f.size > MAX_SIZE) {
+      setError("Il video supera i 100MB");
+      setFile(null);
+      setPreview(null);
+      return;
+    }
     setFile(f);
-    if (f) setPreview(URL.createObjectURL(f));
-    else setPreview(null);
+    setPreview(f ? URL.createObjectURL(f) : null);
+  };
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!file) return;
+    if (!title.trim()) {
+      setError("Il titolo è obbligatorio");
+      return;
+    }
+
+    setError(null);
+    setUploading(true);
+    setProgress(0);
+
+    try {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        setError("Sessione scaduta, fai login");
+        setUploading(false);
+        return;
+      }
+
+      const ext = file.name.split(".").pop() || "mp4";
+      const path = `${user.id}/${Date.now()}.${ext}`;
+
+      // Upload diretto al bucket — bypassa completamente Next.js
+      const { error: uploadError } = await supabase.storage
+        .from("videos")
+        .upload(path, file, {
+          contentType: file.type,
+          upsert: false,
+        });
+
+      if (uploadError) {
+        setError(`Caricamento fallito: ${uploadError.message}`);
+        setUploading(false);
+        return;
+      }
+
+      setProgress(100);
+
+      // Solo metadata (piccolo) passa via Server Action
+      const result = await saveVideoRecord({
+        path,
+        title: title.trim(),
+        description: description.trim() || null,
+      });
+
+      if ("error" in result) {
+        setError(result.error);
+        setUploading(false);
+        return;
+      }
+
+      router.push("/feed");
+    } catch (err) {
+      console.error("[upload]", err);
+      setError("Errore imprevisto durante il caricamento");
+      setUploading(false);
+    }
   };
 
   return (
@@ -51,7 +111,7 @@ export default function UploadPage() {
         <span className="w-16" />
       </div>
 
-      <form action={action} className="space-y-5">
+      <form onSubmit={onSubmit} className="space-y-5">
         <label
           htmlFor="video"
           className="block aspect-[9/16] rounded-2xl bg-zinc-900 border-2 border-dashed border-zinc-700 overflow-hidden cursor-pointer relative"
@@ -76,11 +136,10 @@ export default function UploadPage() {
           )}
           <input
             id="video"
-            name="video"
             type="file"
             accept="video/mp4,video/quicktime,video/webm"
             onChange={onFileChange}
-            required
+            disabled={uploading}
             className="sr-only"
           />
         </label>
@@ -94,12 +153,14 @@ export default function UploadPage() {
           </label>
           <input
             id="title"
-            name="title"
             type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            disabled={uploading}
             required
             maxLength={80}
             placeholder="Es: Doppietta contro il Milan U17"
-            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors"
+            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors disabled:opacity-50"
           />
         </div>
 
@@ -113,11 +174,13 @@ export default function UploadPage() {
           </label>
           <textarea
             id="description"
-            name="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            disabled={uploading}
             rows={3}
             maxLength={280}
             placeholder="Racconta il contesto della giocata…"
-            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors resize-none"
+            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors resize-none disabled:opacity-50"
           />
         </div>
 
@@ -127,7 +190,29 @@ export default function UploadPage() {
           </p>
         )}
 
-        <SubmitButton disabled={!file} />
+        {uploading && (
+          <div className="space-y-2">
+            <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-green-500 transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <p className="text-zinc-400 text-sm text-center">
+              {progress < 100
+                ? "Caricamento video…"
+                : "Salvataggio dettagli…"}
+            </p>
+          </div>
+        )}
+
+        <button
+          type="submit"
+          disabled={uploading || !file}
+          className="w-full py-3.5 bg-green-500 hover:bg-green-400 disabled:opacity-40 disabled:cursor-not-allowed text-black font-bold rounded-xl transition-colors"
+        >
+          {uploading ? "Caricamento in corso…" : "Pubblica"}
+        </button>
       </form>
     </div>
   );
