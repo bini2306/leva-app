@@ -44,7 +44,7 @@ export async function signup(
     console.error("[signup] errore Supabase:", {
       message: error.message,
       status: error.status,
-      code: (error as Record<string, unknown>).code,
+      code: (error as unknown as Record<string, unknown>).code,
     });
     return { error: error.message };
   }
