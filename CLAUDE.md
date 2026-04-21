@@ -151,10 +151,15 @@ Vai su Supabase Dashboard → Storage → New bucket:
 1. **Completare setup** — eseguire le 4 azioni manuali sopra
 2. ✅ **Autenticazione** — signup con selezione ruolo, login, middleware sessione, callback email
 3. **Onboarding per ruolo** — form di completamento profilo diverso per ogni ruolo
-4. **Feed video verticale** — componente core dell'app, stile TikTok, scroll snap
-5. **Upload video** — form caricamento video su Supabase Storage + creazione record `videos`
+4. 🔨 **Feed video verticale** — in costruzione
+5. 🔨 **Upload video** — in costruzione
 6. **Flusso certificazione UI** — ricerca coach, invio richiesta, schermata approvazione coach
 7. **Profilo scout + paywall** — abbonamento scout, integrazione pagamento (Stripe da valutare)
+
+## Fix applicati
+
+- **Trigger `handle_new_user`**: aggiunto `SET search_path = ''` con `public.profiles` fully-qualified — richiesto da Supabase per trigger `SECURITY DEFINER` su `auth.users`.
+- **Migration SQL**: policy che referenziano `certification_requests` spostate in sezione "differita" in fondo (create dopo la tabella).
 
 ## File Auth (creati)
 
@@ -167,3 +172,13 @@ Vai su Supabase Dashboard → Storage → New bucket:
 | `src/app/(auth)/login/page.tsx` | Pagina login |
 | `src/app/(auth)/signup/page.tsx` | Signup multi-step: selezione ruolo → form |
 | `src/app/dashboard/page.tsx` | Dashboard placeholder (mostra nome e ruolo) |
+
+## File Feed Video (creati)
+
+| File | Ruolo |
+|---|---|
+| `src/app/(app)/feed/page.tsx` | Pagina feed — carica lista video + componente client |
+| `src/app/(app)/feed/feed-client.tsx` | Feed scroll verticale full-screen con snap + IntersectionObserver |
+| `src/app/(app)/feed/video-card.tsx` | Singola card video: `<video>` con autoplay on-view, tap per play/pause |
+| `src/app/(app)/upload/page.tsx` | Form upload video → Supabase Storage bucket `videos` |
+| `src/app/actions/videos.ts` | Server Action `uploadVideo`: firma URL + INSERT record |
