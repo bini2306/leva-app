@@ -25,10 +25,12 @@ CREATE POLICY "profiles: update own" ON profiles
   FOR UPDATE USING (auth.uid() = id);
 
 -- Trigger: crea profilo automaticamente alla registrazione
-CREATE OR REPLACE FUNCTION handle_new_user()
-RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER AS $$
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER
+SET search_path = ''
+AS $$
 BEGIN
-  INSERT INTO profiles (id, role, full_name)
+  INSERT INTO public.profiles (id, role, full_name)
   VALUES (
     NEW.id,
     NEW.raw_user_meta_data->>'role',

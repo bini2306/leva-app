@@ -26,18 +26,30 @@ export async function signup(
 ): Promise<AuthState> {
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.signUp({
-    email: formData.get("email") as string,
+  const full_name = formData.get("full_name") as string;
+  const role = formData.get("role") as string;
+  const email = formData.get("email") as string;
+
+  console.log("[signup] tentativo:", { email, role, full_name });
+
+  const { data, error } = await supabase.auth.signUp({
+    email,
     password: formData.get("password") as string,
     options: {
-      data: {
-        full_name: formData.get("full_name") as string,
-        role: formData.get("role") as string,
-      },
+      data: { full_name, role },
     },
   });
 
-  if (error) return { error: error.message };
+  if (error) {
+    console.error("[signup] errore Supabase:", {
+      message: error.message,
+      status: error.status,
+      code: (error as Record<string, unknown>).code,
+    });
+    return { error: error.message };
+  }
+
+  console.log("[signup] successo, user id:", data.user?.id);
   return { success: true };
 }
 
