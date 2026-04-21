@@ -18,7 +18,6 @@ CREATE TABLE profiles (
 
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 
--- Ogni utente legge e modifica solo il proprio profilo
 CREATE POLICY "profiles: select own" ON profiles
   FOR SELECT USING (auth.uid() = id);
 
@@ -85,7 +84,6 @@ CREATE TABLE player_profiles (
 
 ALTER TABLE player_profiles ENABLE ROW LEVEL SECURITY;
 
--- Giocatore: CRUD sul proprio profilo
 CREATE POLICY "player_profiles: select own" ON player_profiles
   FOR SELECT USING (auth.uid() = id);
 
@@ -102,17 +100,6 @@ CREATE POLICY "player_profiles: scout select all" ON player_profiles
       SELECT 1 FROM profiles
       WHERE profiles.id = auth.uid()
       AND profiles.role = 'scout'
-    )
-  );
-
--- Coach: legge i profili dei giocatori che gli hanno inviato richiesta
-CREATE POLICY "player_profiles: coach select requesting" ON player_profiles
-  FOR SELECT USING (
-    EXISTS (
-      SELECT 1 FROM certification_requests cr
-      JOIN coach_profiles cp ON cp.id = cr.coach_id
-      WHERE cr.player_id = player_profiles.id
-      AND cp.id = auth.uid()
     )
   );
 
@@ -155,7 +142,6 @@ CREATE TABLE videos (
 
 ALTER TABLE videos ENABLE ROW LEVEL SECURITY;
 
--- Giocatore: CRUD sui propri video
 CREATE POLICY "videos: select own" ON videos
   FOR SELECT USING (auth.uid() = player_id);
 
@@ -179,17 +165,6 @@ CREATE POLICY "videos: scout select published" ON videos
     )
   );
 
--- Coach: legge i video dei giocatori richiedenti
-CREATE POLICY "videos: coach select requesting players" ON videos
-  FOR SELECT USING (
-    EXISTS (
-      SELECT 1 FROM certification_requests cr
-      JOIN coach_profiles cp ON cp.id = cr.coach_id
-      WHERE cr.player_id = videos.player_id
-      AND cp.id = auth.uid()
-    )
-  );
-
 -- ============================================================
 -- TABELLA: certification_requests
 -- ============================================================
@@ -206,7 +181,6 @@ CREATE TABLE certification_requests (
 
 ALTER TABLE certification_requests ENABLE ROW LEVEL SECURITY;
 
--- Giocatore: crea, legge e cancella la propria richiesta
 CREATE POLICY "cert_requests: player select own" ON certification_requests
   FOR SELECT USING (auth.uid() = player_id);
 
@@ -216,7 +190,6 @@ CREATE POLICY "cert_requests: player insert" ON certification_requests
 CREATE POLICY "cert_requests: player delete own" ON certification_requests
   FOR DELETE USING (auth.uid() = player_id);
 
--- Coach: legge e aggiorna le richieste a lui indirizzate
 CREATE POLICY "cert_requests: coach select own" ON certification_requests
   FOR SELECT USING (
     EXISTS (
@@ -267,6 +240,32 @@ $$;
 CREATE TRIGGER on_certification_updated
   AFTER UPDATE ON certification_requests
   FOR EACH ROW EXECUTE FUNCTION handle_certification_approved();
+
+-- ============================================================
+-- POLICY DIFFERITE: richiedono certification_requests già esistente
+-- ============================================================
+
+-- Coach: legge i profili dei giocatori che gli hanno inviato richiesta
+CREATE POLICY "player_profiles: coach select requesting" ON player_profiles
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM certification_requests cr
+      JOIN coach_profiles cp ON cp.id = cr.coach_id
+      WHERE cr.player_id = player_profiles.id
+      AND cp.id = auth.uid()
+    )
+  );
+
+-- Coach: legge i video dei giocatori richiedenti
+CREATE POLICY "videos: coach select requesting players" ON videos
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM certification_requests cr
+      JOIN coach_profiles cp ON cp.id = cr.coach_id
+      WHERE cr.player_id = videos.player_id
+      AND cp.id = auth.uid()
+    )
+  );
 
 -- ============================================================
 -- TABELLA: fcm_tokens (Firebase push notifications)

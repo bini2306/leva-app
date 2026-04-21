@@ -1,6 +1,5 @@
-// Tipi generati dallo schema Supabase.
-// Esegui: npx supabase gen types typescript --local > src/lib/supabase/types.ts
-// dopo aver collegato il progetto Supabase.
+// Sostituire con generazione automatica dopo aver collegato Supabase CLI:
+// npx supabase gen types typescript --project-id dfmmzbklpysyjkgnvzzy > src/lib/supabase/types.ts
 
 export type UserRole = "player" | "coach" | "scout";
 export type CertificationStatus = "pending" | "approved" | "rejected";
@@ -37,6 +36,7 @@ export interface Database {
           full_name?: string;
           avatar_url?: string | null;
         };
+        Relationships: [];
       };
       player_profiles: {
         Row: {
@@ -68,6 +68,7 @@ export interface Database {
           verified_at?: string | null;
           verified_by?: string | null;
         };
+        Relationships: [];
       };
       coach_profiles: {
         Row: {
@@ -90,6 +91,7 @@ export interface Database {
           team_name?: string | null;
           city?: string | null;
         };
+        Relationships: [];
       };
       scout_profiles: {
         Row: {
@@ -109,6 +111,7 @@ export interface Database {
           subscription_status?: SubscriptionStatus;
           subscription_expires_at?: string | null;
         };
+        Relationships: [];
       };
       videos: {
         Row: {
@@ -144,6 +147,7 @@ export interface Database {
           views_count?: number;
           is_published?: boolean;
         };
+        Relationships: [];
       };
       certification_requests: {
         Row: {
@@ -173,6 +177,7 @@ export interface Database {
           rejection_reason?: string | null;
           reviewed_at?: string | null;
         };
+        Relationships: [];
       };
       fcm_tokens: {
         Row: {
@@ -193,7 +198,12 @@ export interface Database {
           token?: string;
           device_type?: DeviceType | null;
         };
+        Relationships: [];
       };
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
   };
 }

@@ -69,10 +69,10 @@ leva-app/
 |---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | ✅ Configurata — `https://dfmmzbklpysyjkgnvzzy.supabase.co` |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | ✅ Configurata |
-| `FIREBASE_PROJECT_ID` | ❌ Da compilare |
-| `FIREBASE_CLIENT_EMAIL` | ❌ Da compilare |
-| `FIREBASE_PRIVATE_KEY` | ❌ Da compilare |
-| `SUPABASE_WEBHOOK_SECRET` | ❌ Da compilare (genera con `openssl rand -hex 32`) |
+| `FIREBASE_PROJECT_ID` | ✅ Configurata — `leva-853e4` |
+| `FIREBASE_CLIENT_EMAIL` | ✅ Configurata — `firebase-adminsdk-fbsvc@leva-853e4.iam.gserviceaccount.com` |
+| `FIREBASE_PRIVATE_KEY` | ✅ Configurata |
+| `SUPABASE_WEBHOOK_SECRET` | ✅ Configurata |
 
 ---
 
@@ -130,37 +130,40 @@ Tutte le tabelle hanno **Row Level Security (RLS)** abilitata.
 
 ## ⚠️ Azioni Manuali Ancora da Fare
 
-### 1. Eseguire la migration SQL su Supabase
-Vai su [Supabase Dashboard → SQL Editor](https://supabase.com/dashboard/project/dfmmzbklpysyjkgnvzzy/sql) e incolla il contenuto di:
-```
-supabase/migrations/20260420000001_initial_schema.sql
-```
-
-### 2. Creare i bucket Storage
+### 1. ✅ Migration SQL — eseguita
+### 2. ✅ Bucket Storage — da creare (ancora pendente se non fatto)
 Vai su Supabase Dashboard → Storage → New bucket:
 - `videos` (privato)
 - `thumbnails` (pubblico)
 - `avatars` (pubblico)
 
-### 3. Configurare Firebase
-- Crea progetto su [Firebase Console](https://console.firebase.google.com)
-- Vai su Project Settings → Service Accounts → Generate new private key
-- Compila `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY` in `.env.local`
-
+### 3. ✅ Firebase — configurato (service account `leva-853e4`)
 ### 4. Configurare Supabase Webhook
 - Vai su Supabase Dashboard → Database → Webhooks → Create webhook
 - Tabella: `certification_requests`, eventi: `INSERT` + `UPDATE`
 - URL: `https://tuo-dominio.com/api/notify`
-- Header: `Authorization: Bearer {SUPABASE_WEBHOOK_SECRET}`
+- Header: `Authorization: Bearer 4e48f36720df63ce29c836bf943bc0046f24e344a4d3f89de1fffc446aa52e49`
 
 ---
 
 ## Prossimi Passi (sviluppo)
 
 1. **Completare setup** — eseguire le 4 azioni manuali sopra
-2. **Autenticazione** — pagina signup con selezione ruolo (giocatore / coach / scout), login, middleware di sessione
+2. ✅ **Autenticazione** — signup con selezione ruolo, login, middleware sessione, callback email
 3. **Onboarding per ruolo** — form di completamento profilo diverso per ogni ruolo
 4. **Feed video verticale** — componente core dell'app, stile TikTok, scroll snap
 5. **Upload video** — form caricamento video su Supabase Storage + creazione record `videos`
 6. **Flusso certificazione UI** — ricerca coach, invio richiesta, schermata approvazione coach
 7. **Profilo scout + paywall** — abbonamento scout, integrazione pagamento (Stripe da valutare)
+
+## File Auth (creati)
+
+| File | Ruolo |
+|---|---|
+| `src/middleware.ts` | Protegge le route, refresh sessione Supabase |
+| `src/lib/supabase/middleware.ts` | Client Supabase per il middleware |
+| `src/app/actions/auth.ts` | Server Actions: `login`, `signup`, `logout` |
+| `src/app/auth/callback/route.ts` | Callback conferma email Supabase |
+| `src/app/(auth)/login/page.tsx` | Pagina login |
+| `src/app/(auth)/signup/page.tsx` | Signup multi-step: selezione ruolo → form |
+| `src/app/dashboard/page.tsx` | Dashboard placeholder (mostra nome e ruolo) |

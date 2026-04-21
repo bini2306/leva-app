@@ -42,12 +42,12 @@ export async function POST(request: NextRequest) {
   if (type === "INSERT") {
     const { data: tokens } = await supabase
       .from("fcm_tokens")
-      .select("token")
+      .select("*")
       .eq("user_id", record.coach_id);
 
     const { data: playerProfile } = await supabase
       .from("profiles")
-      .select("full_name")
+      .select("*")
       .eq("id", record.player_id)
       .single();
 
@@ -75,12 +75,12 @@ export async function POST(request: NextRequest) {
   ) {
     const { data: tokens } = await supabase
       .from("fcm_tokens")
-      .select("token")
+      .select("*")
       .eq("user_id", record.player_id);
 
     const { data: coachProfile } = await supabase
       .from("profiles")
-      .select("full_name")
+      .select("*")
       .eq("id", record.coach_id)
       .single();
 
