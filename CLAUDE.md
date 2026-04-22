@@ -164,6 +164,8 @@ Vai su Supabase Dashboard → Storage → New bucket (nomi **case-sensitive**):
 - **Migration SQL**: policy che referenziano `certification_requests` spostate in sezione "differita" in fondo (create dopo la tabella).
 - **Bucket Storage**: nomi ufficiali case-sensitive → `Video`, `Thumbnails`, `Avatar`. Policy in `20260422000001_storage_policies.sql` aggiornate.
 - **Feed**: usa `createSignedUrls` (batch, TTL 1h) e `.in()` per ridurre da N+1 a 3 query totali.
+- **FK `videos.player_id` / `certification_requests.player_id`**: spostate da `player_profiles(id)` a `profiles(id)` — `player_profiles` si crea in onboarding (non ancora obbligatorio), `profiles` invece esiste sempre dal signup. Migration: `20260422000002_fix_fk_player_id.sql`.
+- **RLS feed**: aggiunta policy SELECT su `videos` per tutti gli utenti autenticati (non solo scout) + policy SELECT su `storage.objects` per bucket `Video` (necessaria a `createSignedUrls` con JWT utente). Migration: `20260422000003_fix_feed_rls.sql`.
 
 ## File Auth (creati)
 
