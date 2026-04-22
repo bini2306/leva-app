@@ -62,6 +62,15 @@ export default async function ProfilePage() {
   const playerProfile = playerProfileRes.data;
   const videos = videosRes.data ?? [];
 
+  console.log("[profile]", {
+    userId: user.id,
+    role: profile.role,
+    videosRowCount: videos.length,
+    videosErr: videosRes.error,
+    playerProfileErr: playerProfileRes.error,
+    firstVideoPath: videos[0]?.video_url,
+  });
+
   const gridVideos: GridVideo[] = [];
   if (videos.length > 0) {
     const signedResults = await Promise.all(
@@ -73,12 +82,12 @@ export default async function ProfilePage() {
     videos.forEach((v, i) => {
       const res = signedResults[i];
       const url = res?.data?.signedUrl;
-      if (!url) {
-        if (res?.error) {
-          console.error("[profile] signed URL error for", v.video_url, res.error);
-        }
-        return;
-      }
+      console.log("[profile] signed result", {
+        path: v.video_url,
+        hasUrl: !!url,
+        error: res?.error?.message,
+      });
+      if (!url) return;
       gridVideos.push({
         id: v.id,
         title: v.title,
@@ -87,6 +96,8 @@ export default async function ProfilePage() {
       });
     });
   }
+
+  console.log("[profile] gridVideos.length =", gridVideos.length);
 
   const totalViews = videos.reduce((acc, v) => acc + (v.views_count ?? 0), 0);
   const videoCount = videos.length;
