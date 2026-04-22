@@ -131,7 +131,7 @@ CREATE POLICY "scout_profiles: update own" ON scout_profiles
 -- ============================================================
 CREATE TABLE videos (
   id               uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  player_id        uuid NOT NULL REFERENCES player_profiles(id) ON DELETE CASCADE,
+  player_id        uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   title            text NOT NULL,
   description      text,
   video_url        text NOT NULL,
@@ -172,7 +172,7 @@ CREATE POLICY "videos: scout select published" ON videos
 -- ============================================================
 CREATE TABLE certification_requests (
   id               uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  player_id        uuid NOT NULL UNIQUE REFERENCES player_profiles(id) ON DELETE CASCADE,
+  player_id        uuid NOT NULL UNIQUE REFERENCES profiles(id) ON DELETE CASCADE,
   coach_id         uuid NOT NULL REFERENCES coach_profiles(id) ON DELETE CASCADE,
   status           text DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
   player_message   text,
