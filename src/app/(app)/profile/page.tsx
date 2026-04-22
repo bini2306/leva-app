@@ -62,33 +62,30 @@ export default async function ProfilePage() {
   const playerProfile = playerProfileRes.data;
   const videos = videosRes.data ?? [];
 
-  let gridVideos: GridVideo[] = [];
+  const gridVideos: GridVideo[] = [];
   if (videos.length > 0) {
-    const { data: signed } = await supabase.storage
-      .from("Video")
-      .createSignedUrls(
-        videos.map((v) => v.video_url),
-        SIGNED_URL_TTL
-      );
-
-    const urlByPath = new Map(
-      (signed ?? [])
-        .filter((s) => s.signedUrl)
-        .map((s) => [s.path, s.signedUrl])
+    const signedResults = await Promise.all(
+      videos.map((v) =>
+        supabase.storage.from("Video").createSignedUrl(v.video_url, SIGNED_URL_TTL)
+      )
     );
 
-    gridVideos = videos
-      .map((v) => {
-        const url = urlByPath.get(v.video_url);
-        if (!url) return null;
-        return {
-          id: v.id,
-          title: v.title,
-          videoUrl: url,
-          views: v.views_count ?? 0,
-        };
-      })
-      .filter((v): v is GridVideo => v !== null);
+    videos.forEach((v, i) => {
+      const res = signedResults[i];
+      const url = res?.data?.signedUrl;
+      if (!url) {
+        if (res?.error) {
+          console.error("[profile] signed URL error for", v.video_url, res.error);
+        }
+        return;
+      }
+      gridVideos.push({
+        id: v.id,
+        title: v.title,
+        videoUrl: url,
+        views: v.views_count ?? 0,
+      });
+    });
   }
 
   const totalViews = videos.reduce((acc, v) => acc + (v.views_count ?? 0), 0);
