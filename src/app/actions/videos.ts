@@ -31,7 +31,7 @@ export async function saveVideoRecord(input: {
 
   if (error) {
     console.error("[saveVideoRecord] insert error:", error);
-    await supabase.storage.from("videos").remove([input.path]);
+    await supabase.storage.from("Video").remove([input.path]);
     return { error: `DB error: ${error.message}` };
   }
 

@@ -10,6 +10,7 @@ type Props = {
   playerName: string;
   isVerified: boolean;
   isActive: boolean;
+  isNeighbor: boolean;
 };
 
 export function VideoCard({
@@ -19,10 +20,13 @@ export function VideoCard({
   playerName,
   isVerified,
   isActive,
+  isNeighbor,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [isBuffering, setIsBuffering] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -30,7 +34,10 @@ export function VideoCard({
 
     if (isActive) {
       video.currentTime = 0;
-      video.play().then(() => setIsPlaying(true)).catch(() => {});
+      video
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => setIsPlaying(false));
     } else {
       video.pause();
       setIsPlaying(false);
@@ -39,10 +46,9 @@ export function VideoCard({
 
   const togglePlay = () => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || hasError) return;
     if (video.paused) {
-      video.play();
-      setIsPlaying(true);
+      video.play().then(() => setIsPlaying(true)).catch(() => {});
     } else {
       video.pause();
       setIsPlaying(false);
@@ -57,20 +63,46 @@ export function VideoCard({
     setIsMuted(video.muted);
   };
 
+  const preload = isActive ? "auto" : isNeighbor ? "metadata" : "none";
+
   return (
     <section className="snap-start h-[100dvh] w-full relative bg-black flex items-center justify-center">
-      <video
-        ref={videoRef}
-        src={videoUrl}
-        className="h-full w-full object-cover"
-        loop
-        muted={isMuted}
-        playsInline
-        preload="auto"
-        onClick={togglePlay}
-      />
+      {!hasError && (
+        <video
+          ref={videoRef}
+          src={videoUrl}
+          className="h-full w-full object-cover"
+          loop
+          muted={isMuted}
+          playsInline
+          preload={preload}
+          onClick={togglePlay}
+          onWaiting={() => setIsBuffering(true)}
+          onPlaying={() => setIsBuffering(false)}
+          onCanPlay={() => setIsBuffering(false)}
+          onError={() => {
+            setHasError(true);
+            setIsBuffering(false);
+          }}
+        />
+      )}
 
-      {!isPlaying && isActive && (
+      {hasError && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-zinc-400 gap-3 px-8 text-center">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-10 h-10">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+          </svg>
+          <p className="text-sm">Impossibile caricare il video</p>
+        </div>
+      )}
+
+      {isBuffering && isActive && !hasError && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="w-10 h-10 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+        </div>
+      )}
+
+      {!isPlaying && isActive && !isBuffering && !hasError && (
         <button
           onClick={togglePlay}
           className="absolute inset-0 flex items-center justify-center bg-black/20"

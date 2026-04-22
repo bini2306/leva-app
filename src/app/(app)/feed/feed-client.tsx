@@ -91,6 +91,7 @@ export function FeedClient({ videos }: { videos: FeedVideo[] }) {
             playerName={video.playerName}
             isVerified={video.isVerified}
             isActive={index === activeIndex}
+            isNeighbor={Math.abs(index - activeIndex) === 1}
           />
         </div>
       ))}

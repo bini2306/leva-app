@@ -86,7 +86,7 @@ Tutte le tabelle hanno **Row Level Security (RLS)** abilitata.
 | `player_profiles` | Dati giocatore: posizione, bio, città, `is_verified`, `verified_by` |
 | `coach_profiles` | Dati coach: `figc_license_number` (UNIQUE), tipo licenza, squadra |
 | `scout_profiles` | Dati scout: organizzazione, `subscription_status` |
-| `videos` | Video caricati dai giocatori — `video_url` punta a Supabase Storage (bucket privato `videos`) |
+| `videos` | Video caricati dai giocatori — `video_url` punta a Supabase Storage (bucket privato `Video`) |
 | `certification_requests` | Richieste verifica giocatore→coach — `player_id UNIQUE` (una sola richiesta attiva per giocatore) |
 | `fcm_tokens` | Token FCM per notifiche push — uno per device per utente |
 
@@ -97,11 +97,13 @@ Tutte le tabelle hanno **Row Level Security (RLS)** abilitata.
 
 ### Storage bucket da creare (via dashboard Supabase)
 
+> **Nomi esatti — case-sensitive.** Il codice referenzia questi nomi letterali.
+
 | Bucket | Accesso |
 |---|---|
-| `videos` | Privato |
-| `thumbnails` | Pubblico |
-| `avatars` | Pubblico |
+| `Video` | Privato (read via signed URL dal server, 1h TTL) |
+| `Thumbnails` | Pubblico |
+| `Avatar` | Pubblico |
 
 ---
 
@@ -131,11 +133,11 @@ Tutte le tabelle hanno **Row Level Security (RLS)** abilitata.
 ## ⚠️ Azioni Manuali Ancora da Fare
 
 ### 1. ✅ Migration SQL — eseguita
-### 2. ✅ Bucket Storage — da creare (ancora pendente se non fatto)
-Vai su Supabase Dashboard → Storage → New bucket:
-- `videos` (privato)
-- `thumbnails` (pubblico)
-- `avatars` (pubblico)
+### 2. Bucket Storage — da creare (ancora pendente se non fatto)
+Vai su Supabase Dashboard → Storage → New bucket (nomi **case-sensitive**):
+- `Video` (privato)
+- `Thumbnails` (pubblico)
+- `Avatar` (pubblico)
 
 ### 3. ✅ Firebase — configurato (service account `leva-853e4`)
 ### 4. Configurare Supabase Webhook
@@ -151,8 +153,8 @@ Vai su Supabase Dashboard → Storage → New bucket:
 1. **Completare setup** — eseguire le 4 azioni manuali sopra
 2. ✅ **Autenticazione** — signup con selezione ruolo, login, middleware sessione, callback email
 3. **Onboarding per ruolo** — form di completamento profilo diverso per ogni ruolo
-4. 🔨 **Feed video verticale** — in costruzione
-5. 🔨 **Upload video** — in costruzione
+4. ✅ **Feed video verticale** — snap scroll, autoplay on-view, signed URL, preload vicini, gestione errore/buffering
+5. ✅ **Upload video** — validazione tipo/size, preview, rimozione, progresso simulato, redirect feed
 6. **Flusso certificazione UI** — ricerca coach, invio richiesta, schermata approvazione coach
 7. **Profilo scout + paywall** — abbonamento scout, integrazione pagamento (Stripe da valutare)
 
@@ -160,6 +162,8 @@ Vai su Supabase Dashboard → Storage → New bucket:
 
 - **Trigger `handle_new_user`**: aggiunto `SET search_path = ''` con `public.profiles` fully-qualified — richiesto da Supabase per trigger `SECURITY DEFINER` su `auth.users`.
 - **Migration SQL**: policy che referenziano `certification_requests` spostate in sezione "differita" in fondo (create dopo la tabella).
+- **Bucket Storage**: nomi ufficiali case-sensitive → `Video`, `Thumbnails`, `Avatar`. Policy in `20260422000001_storage_policies.sql` aggiornate.
+- **Feed**: usa `createSignedUrls` (batch, TTL 1h) e `.in()` per ridurre da N+1 a 3 query totali.
 
 ## File Auth (creati)
 

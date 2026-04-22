@@ -288,6 +288,6 @@ CREATE POLICY "fcm_tokens: CRUD own" ON fcm_tokens
 -- ============================================================
 -- STORAGE: bucket setup (da eseguire via Supabase dashboard o CLI)
 -- ============================================================
--- INSERT INTO storage.buckets (id, name, public) VALUES ('videos', 'videos', false);
--- INSERT INTO storage.buckets (id, name, public) VALUES ('thumbnails', 'thumbnails', true);
--- INSERT INTO storage.buckets (id, name, public) VALUES ('avatars', 'avatars', true);
+-- INSERT INTO storage.buckets (id, name, public) VALUES ('Video', 'Video', false);
+-- INSERT INTO storage.buckets (id, name, public) VALUES ('Thumbnails', 'Thumbnails', true);
+-- INSERT INTO storage.buckets (id, name, public) VALUES ('Avatar', 'Avatar', true);
