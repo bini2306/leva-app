@@ -29,11 +29,15 @@ export function VideoGrid({ videos }: { videos: GridVideo[] }) {
           className="relative aspect-[9/16] rounded-lg overflow-hidden bg-zinc-900 group"
         >
           <video
-            src={v.videoUrl}
+            src={`${v.videoUrl}#t=0.1`}
             className="w-full h-full object-cover"
             preload="metadata"
             muted
             playsInline
+            onLoadedMetadata={(e) => {
+              const video = e.currentTarget;
+              if (video.currentTime < 0.1) video.currentTime = 0.1;
+            }}
             onMouseEnter={(e) => {
               const video = e.currentTarget;
               video.play().catch(() => {});
@@ -41,7 +45,7 @@ export function VideoGrid({ videos }: { videos: GridVideo[] }) {
             onMouseLeave={(e) => {
               const video = e.currentTarget;
               video.pause();
-              video.currentTime = 0;
+              video.currentTime = 0.1;
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
