@@ -156,8 +156,9 @@ Vai su Supabase Dashboard → Storage → New bucket (nomi **case-sensitive**):
 4. ✅ **Feed video verticale** — snap scroll, autoplay on-view, signed URL, preload vicini, gestione errore/buffering
 5. ✅ **Upload video** — validazione tipo/size, preview, rimozione, progresso simulato, redirect feed
 6. ✅ **Profilo giocatore** — avatar, nome, ruolo, badge FIGC, stat (video/views), griglia video, logout
-7. **Flusso certificazione UI** — ricerca coach, invio richiesta, schermata approvazione coach
-8. **Profilo scout + paywall** — abbonamento scout, integrazione pagamento (Stripe da valutare)
+7. ✅ **Flusso certificazione** — `/certify` (player: ricerca coach + richiesta) + `/coach` (coach: approva/rifiuta)
+8. **Onboarding per ruolo** — form di completamento profilo (serve per `player_profiles.birth_date` e `coach_profiles.figc_license_number`)
+9. **Profilo scout + paywall** — abbonamento scout, integrazione pagamento (Stripe da valutare)
 
 ## Fix applicati
 
@@ -199,3 +200,20 @@ Vai su Supabase Dashboard → Storage → New bucket (nomi **case-sensitive**):
 | `src/app/(app)/profile/page.tsx` | Server Component: fetch profile + player_profile + videos, signed URL per la griglia |
 | `src/app/(app)/profile/video-grid.tsx` | Griglia 3 colonne aspect 9/16 con preview video on-hover |
 | `src/app/(app)/profile/logout-button.tsx` | Client Component per action `logout` |
+
+## File Certificazione (creati)
+
+| File | Ruolo |
+|---|---|
+| `src/app/actions/certification.ts` | Server Actions: `searchCoaches`, `requestCertification`, `cancelRequest`, `approveRequest`, `rejectRequest` |
+| `src/app/(app)/certify/page.tsx` | Gate: solo player. Carica richiesta esistente + dati coach |
+| `src/app/(app)/certify/certify-client.tsx` | Ricerca coach (debounced su cambio input), selezione, messaggio, invio. Stato richiesta esistente con opzioni annulla/rimuovi |
+| `src/app/(app)/coach/page.tsx` | Gate: solo coach. Liste "Da valutare" (pending) + "Storico" |
+| `src/app/(app)/coach/request-card.tsx` | Card per richiesta: approva inline, rifiuta con motivazione opzionale |
+
+### RLS necessarie (migration `20260422000004_profiles_read_for_certification.sql`)
+- `profiles` SELECT per tutti gli autenticati dove `role = 'coach'` (ricerca coach)
+- `profiles` SELECT dove `role = 'player'` e il richiedente è il coach della relativa `certification_requests` (il coach vede il nome del player richiedente)
+
+### Trigger attivo (già in initial_schema)
+- `on_certification_updated` → quando `status` passa a `approved`, aggiorna `player_profiles.is_verified = true`, `verified_by = coach_id`, `verified_at = now()`
