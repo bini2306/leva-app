@@ -167,6 +167,8 @@ Vai su Supabase Dashboard → Storage → New bucket (nomi **case-sensitive**):
 - **Feed**: usa `createSignedUrls` (batch, TTL 1h) e `.in()` per ridurre da N+1 a 3 query totali.
 - **FK `videos.player_id` / `certification_requests.player_id`**: spostate da `player_profiles(id)` a `profiles(id)` — `player_profiles` si crea in onboarding (non ancora obbligatorio), `profiles` invece esiste sempre dal signup. Migration: `20260422000002_fix_fk_player_id.sql`.
 - **RLS feed**: aggiunta policy SELECT su `videos` per tutti gli utenti autenticati (non solo scout) + policy SELECT su `storage.objects` per bucket `Video` (necessaria a `createSignedUrls` con JWT utente). Migration: `20260422000003_fix_feed_rls.sql`.
+- **Profilo griglia**: `<video>` con `preload=metadata` non renderizza alcun frame → box grigio che sembra vuoto. Fix: `src="#t=0.1"` + `onLoadedMetadata` che forza `currentTime=0.1` per mostrare il primo frame come thumbnail.
+- **createSignedUrls → createSignedUrl**: nel profilo usiamo la versione singola in Promise.all per evitare mismatch path↔signedUrl del batch response.
 
 ## File Auth (creati)
 
