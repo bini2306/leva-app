@@ -155,8 +155,9 @@ Vai su Supabase Dashboard → Storage → New bucket (nomi **case-sensitive**):
 3. **Onboarding per ruolo** — form di completamento profilo diverso per ogni ruolo
 4. ✅ **Feed video verticale** — snap scroll, autoplay on-view, signed URL, preload vicini, gestione errore/buffering
 5. ✅ **Upload video** — validazione tipo/size, preview, rimozione, progresso simulato, redirect feed
-6. **Flusso certificazione UI** — ricerca coach, invio richiesta, schermata approvazione coach
-7. **Profilo scout + paywall** — abbonamento scout, integrazione pagamento (Stripe da valutare)
+6. ✅ **Profilo giocatore** — avatar, nome, ruolo, badge FIGC, stat (video/views), griglia video, logout
+7. **Flusso certificazione UI** — ricerca coach, invio richiesta, schermata approvazione coach
+8. **Profilo scout + paywall** — abbonamento scout, integrazione pagamento (Stripe da valutare)
 
 ## Fix applicati
 
@@ -186,5 +187,13 @@ Vai su Supabase Dashboard → Storage → New bucket (nomi **case-sensitive**):
 | `src/app/(app)/feed/page.tsx` | Pagina feed — carica lista video + componente client |
 | `src/app/(app)/feed/feed-client.tsx` | Feed scroll verticale full-screen con snap + IntersectionObserver |
 | `src/app/(app)/feed/video-card.tsx` | Singola card video: `<video>` con autoplay on-view, tap per play/pause |
-| `src/app/(app)/upload/page.tsx` | Form upload video → Supabase Storage bucket `videos` |
+| `src/app/(app)/upload/page.tsx` | Form upload video → Supabase Storage bucket `Video` |
 | `src/app/actions/videos.ts` | Server Action `uploadVideo`: firma URL + INSERT record |
+
+## File Profilo (creati)
+
+| File | Ruolo |
+|---|---|
+| `src/app/(app)/profile/page.tsx` | Server Component: fetch profile + player_profile + videos, signed URL per la griglia |
+| `src/app/(app)/profile/video-grid.tsx` | Griglia 3 colonne aspect 9/16 con preview video on-hover |
+| `src/app/(app)/profile/logout-button.tsx` | Client Component per action `logout` |

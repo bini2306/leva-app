@@ -116,7 +116,7 @@ export function FeedClient({ videos }: { videos: FeedVideo[] }) {
           </svg>
         </Link>
         <Link
-          href="/dashboard"
+          href="/profile"
           className="text-zinc-400 hover:text-white transition-colors flex flex-col items-center gap-1 text-xs"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-6 h-6">
