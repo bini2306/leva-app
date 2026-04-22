@@ -1,6 +1,7 @@
 -- ============================================================
--- Storage policies per bucket `Video`
--- (bucket pubblico in lettura, ma upload/delete solo al proprietario)
+-- Storage policies per bucket `Video` (privato)
+-- Lettura: solo server-side via signed URL (TTL 1h) generati col client Supabase
+-- Scrittura/modifica/cancellazione: solo il proprietario nella propria cartella
 -- ============================================================
 
 -- Solo utenti autenticati caricano nella propria cartella `<user_id>/...`
