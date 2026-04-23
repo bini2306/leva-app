@@ -37,24 +37,44 @@ App italiana di scouting per il calcio giovanile. Feed video verticale stile Tik
 leva-app/
 ├── src/
 │   ├── app/
-│   │   ├── api/
-│   │   │   └── notify/
-│   │   │       └── route.ts      ← webhook Supabase → FCM push
-│   │   ├── layout.tsx            ← viewport mobile-first, font Geist
-│   │   ├── page.tsx              ← homepage (ancora template default)
-│   │   └── globals.css
+│   │   ├── (auth)/
+│   │   │   ├── login/page.tsx
+│   │   │   └── signup/page.tsx       ← multi-step: selezione ruolo → form
+│   │   ├── (app)/
+│   │   │   ├── onboarding/           ← completamento profilo dopo primo accesso
+│   │   │   ├── feed/                 ← feed verticale TikTok-style
+│   │   │   ├── upload/               ← caricamento video
+│   │   │   ├── profile/              ← profilo giocatore
+│   │   │   ├── certify/              ← player: richiesta certificazione
+│   │   │   └── coach/                ← coach: approva/rifiuta richieste
+│   │   ├── actions/
+│   │   │   ├── auth.ts               ← login, signup, logout
+│   │   │   ├── videos.ts             ← uploadVideo
+│   │   │   ├── certification.ts      ← searchCoaches, requestCertification, approve, reject
+│   │   │   └── onboarding.ts         ← completePlayerOnboarding, completeCoachOnboarding
+│   │   ├── api/notify/route.ts       ← webhook Supabase → FCM push
+│   │   ├── auth/callback/route.ts
+│   │   ├── dashboard/page.tsx
+│   │   └── layout.tsx
+│   ├── middleware.ts
 │   └── lib/
 │       ├── supabase/
-│       │   ├── client.ts         ← createBrowserClient (componenti client)
-│       │   ├── server.ts         ← createServerClient SSR (Server Components, API routes)
-│       │   └── types.ts          ← tipi TypeScript manuali del DB
+│       │   ├── client.ts
+│       │   ├── server.ts
+│       │   ├── middleware.ts
+│       │   └── types.ts              ← tipi TypeScript manuali del DB
 │       └── firebase/
-│           └── admin.ts          ← Firebase Admin singleton + sendPushNotification / sendPushToMultiple
+│           └── admin.ts              ← Firebase Admin singleton + FCM helpers
 ├── supabase/
 │   └── migrations/
-│       └── 20260420000001_initial_schema.sql   ← DA ESEGUIRE SU SUPABASE (vedi sotto)
-├── .env.local                    ← NON in git — credenziali reali
-├── .env.local.example            ← template variabili d'ambiente
+│       ├── 20260420000001_initial_schema.sql
+│       ├── 20260422000001_storage_policies.sql
+│       ├── 20260422000002_fix_fk_player_id.sql
+│       ├── 20260422000003_fix_feed_rls.sql
+│       ├── 20260422000004_profiles_read_for_certification.sql
+│       └── 20260423000001_player_profile_team_name.sql
+├── .env.local                        ← NON in git — credenziali reali
+├── .env.local.example
 ├── CLAUDE.md
 └── package.json
 ```
@@ -132,7 +152,7 @@ Tutte le tabelle hanno **Row Level Security (RLS)** abilitata.
 
 ## ⚠️ Azioni Manuali Ancora da Fare
 
-### 1. ✅ Migration SQL — eseguita
+### 1. ✅ Migration SQL iniziale — eseguita
 ### 2. Bucket Storage — da creare (ancora pendente se non fatto)
 Vai su Supabase Dashboard → Storage → New bucket (nomi **case-sensitive**):
 - `Video` (privato)
@@ -146,34 +166,40 @@ Vai su Supabase Dashboard → Storage → New bucket (nomi **case-sensitive**):
 - URL: `https://tuo-dominio.com/api/notify`
 - Header: `Authorization: Bearer 4e48f36720df63ce29c836bf943bc0046f24e344a4d3f89de1fffc446aa52e49`
 
+### 5. Migration `20260423000001` — da eseguire su Supabase
+Vai su Supabase Dashboard → SQL Editor e incolla:
+```sql
+ALTER TABLE player_profiles ADD COLUMN IF NOT EXISTS team_name TEXT;
+```
+
 ---
 
 ## Prossimi Passi (sviluppo)
 
-1. **Completare setup** — eseguire le 4 azioni manuali sopra
+1. **Completare setup** — eseguire le azioni manuali sopra (bucket, webhook, migration team_name)
 2. ✅ **Autenticazione** — signup con selezione ruolo, login, middleware sessione, callback email
-3. ✅ **Onboarding per ruolo** — form di completamento profilo diverso per ogni ruolo
+3. ✅ **Onboarding per ruolo** — form player (data nascita, posizione, squadra, provincia) e coach (licenza FIGC, tipo, squadra)
 4. ✅ **Feed video verticale** — snap scroll, autoplay on-view, signed URL, preload vicini, gestione errore/buffering
 5. ✅ **Upload video** — validazione tipo/size, preview, rimozione, progresso simulato, redirect feed
 6. ✅ **Profilo giocatore** — avatar, nome, ruolo, badge FIGC, stat (video/views), griglia video, logout
 7. ✅ **Flusso certificazione** — `/certify` (player: ricerca coach + richiesta) + `/coach` (coach: approva/rifiuta)
-8. ✅ **Onboarding per ruolo** — form di completamento profilo (serve per `player_profiles.birth_date` e `coach_profiles.figc_license_number`)
-9. **Profilo scout + paywall** — abbonamento scout, integrazione pagamento (Stripe da valutare)
+8. **Profilo scout + paywall** — pagina profilo scout, abbonamento, integrazione pagamento (Stripe)
+9. **Homepage pubblica** — landing page per acquisizione utenti (sostituisce il template default)
 
-## File Onboarding (creati)
+## File Onboarding (creati — sessione 2026-04-23)
 
 | File | Ruolo |
 |---|---|
-| `src/app/(app)/onboarding/page.tsx` | Server Component: verifica se il profilo ruolo esiste già, altrimenti mostra il form |
-| `src/app/(app)/onboarding/onboarding-client.tsx` | Client Component: form player (data nascita, posizione, squadra, provincia) e form coach (licenza FIGC, tipo, squadra) |
-| `src/app/actions/onboarding.ts` | Server Actions: `completePlayerOnboarding`, `completeCoachOnboarding` → INSERT in `player_profiles`/`coach_profiles` |
-| `supabase/migrations/20260423000001_player_profile_team_name.sql` | Aggiunge `team_name TEXT` a `player_profiles` |
+| `src/app/(app)/onboarding/page.tsx` | Server Component: gate — se profilo ruolo esiste → redirect dashboard |
+| `src/app/(app)/onboarding/onboarding-client.tsx` | Client Component: form player (data nascita, posizione, squadra, provincia) e coach (licenza FIGC, tipo, squadra) |
+| `src/app/actions/onboarding.ts` | Server Actions: `completePlayerOnboarding`, `completeCoachOnboarding` |
+| `supabase/migrations/20260423000001_player_profile_team_name.sql` | Aggiunge `team_name TEXT` a `player_profiles` — **da eseguire su Supabase** |
 
 ### Flusso onboarding
-- Dashboard controlla se il profilo ruolo (`player_profiles` / `coach_profiles`) esiste → se mancante, redirect a `/onboarding`
-- `/onboarding` controlla di nuovo (gate server-side) e presenta il form appropriato per il ruolo
+- Dashboard controlla se `player_profiles` / `coach_profiles` esiste → se mancante, redirect a `/onboarding`
+- `/onboarding` presenta il form appropriato per il ruolo; se già completato → redirect dashboard
 - Al submit: INSERT nel profilo ruolo → redirect a `/dashboard`
-- Scout: non ha form onboarding, passa direttamente alla dashboard
+- Scout: nessun form, passa direttamente alla dashboard
 
 ## Fix applicati
 
