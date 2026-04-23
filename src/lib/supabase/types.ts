@@ -45,6 +45,7 @@ export interface Database {
           position: PlayerPosition | null;
           bio: string | null;
           city: string | null;
+          team_name: string | null;
           is_verified: boolean;
           verified_at: string | null;
           verified_by: string | null;
@@ -55,6 +56,7 @@ export interface Database {
           position?: PlayerPosition | null;
           bio?: string | null;
           city?: string | null;
+          team_name?: string | null;
           is_verified?: boolean;
           verified_at?: string | null;
           verified_by?: string | null;
@@ -64,6 +66,7 @@ export interface Database {
           position?: PlayerPosition | null;
           bio?: string | null;
           city?: string | null;
+          team_name?: string | null;
           is_verified?: boolean;
           verified_at?: string | null;
           verified_by?: string | null;

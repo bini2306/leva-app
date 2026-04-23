@@ -152,13 +152,28 @@ Vai su Supabase Dashboard → Storage → New bucket (nomi **case-sensitive**):
 
 1. **Completare setup** — eseguire le 4 azioni manuali sopra
 2. ✅ **Autenticazione** — signup con selezione ruolo, login, middleware sessione, callback email
-3. **Onboarding per ruolo** — form di completamento profilo diverso per ogni ruolo
+3. ✅ **Onboarding per ruolo** — form di completamento profilo diverso per ogni ruolo
 4. ✅ **Feed video verticale** — snap scroll, autoplay on-view, signed URL, preload vicini, gestione errore/buffering
 5. ✅ **Upload video** — validazione tipo/size, preview, rimozione, progresso simulato, redirect feed
 6. ✅ **Profilo giocatore** — avatar, nome, ruolo, badge FIGC, stat (video/views), griglia video, logout
 7. ✅ **Flusso certificazione** — `/certify` (player: ricerca coach + richiesta) + `/coach` (coach: approva/rifiuta)
-8. **Onboarding per ruolo** — form di completamento profilo (serve per `player_profiles.birth_date` e `coach_profiles.figc_license_number`)
+8. ✅ **Onboarding per ruolo** — form di completamento profilo (serve per `player_profiles.birth_date` e `coach_profiles.figc_license_number`)
 9. **Profilo scout + paywall** — abbonamento scout, integrazione pagamento (Stripe da valutare)
+
+## File Onboarding (creati)
+
+| File | Ruolo |
+|---|---|
+| `src/app/(app)/onboarding/page.tsx` | Server Component: verifica se il profilo ruolo esiste già, altrimenti mostra il form |
+| `src/app/(app)/onboarding/onboarding-client.tsx` | Client Component: form player (data nascita, posizione, squadra, provincia) e form coach (licenza FIGC, tipo, squadra) |
+| `src/app/actions/onboarding.ts` | Server Actions: `completePlayerOnboarding`, `completeCoachOnboarding` → INSERT in `player_profiles`/`coach_profiles` |
+| `supabase/migrations/20260423000001_player_profile_team_name.sql` | Aggiunge `team_name TEXT` a `player_profiles` |
+
+### Flusso onboarding
+- Dashboard controlla se il profilo ruolo (`player_profiles` / `coach_profiles`) esiste → se mancante, redirect a `/onboarding`
+- `/onboarding` controlla di nuovo (gate server-side) e presenta il form appropriato per il ruolo
+- Al submit: INSERT nel profilo ruolo → redirect a `/dashboard`
+- Scout: non ha form onboarding, passa direttamente alla dashboard
 
 ## Fix applicati
 

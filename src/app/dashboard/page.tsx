@@ -17,6 +17,22 @@ export default async function DashboardPage() {
     .eq("id", user.id)
     .single();
 
+  if (profile?.role === "player") {
+    const { data: pp } = await supabase
+      .from("player_profiles")
+      .select("id")
+      .eq("id", user.id)
+      .maybeSingle();
+    if (!pp) redirect("/onboarding");
+  } else if (profile?.role === "coach") {
+    const { data: cp } = await supabase
+      .from("coach_profiles")
+      .select("id")
+      .eq("id", user.id)
+      .maybeSingle();
+    if (!cp) redirect("/onboarding");
+  }
+
   const roleLabelMap: Record<string, string> = {
     player: "Giocatore",
     coach: "Allenatore FIGC",
