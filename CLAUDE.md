@@ -184,7 +184,7 @@ ALTER TABLE player_profiles ADD COLUMN IF NOT EXISTS team_name TEXT;
 6. ✅ **Profilo giocatore** — avatar, nome, ruolo, badge FIGC, stat (video/views), griglia video, logout
 7. ✅ **Flusso certificazione** — `/certify` (player: ricerca coach + richiesta) + `/coach` (coach: approva/rifiuta)
 8. **Profilo scout + paywall** — pagina profilo scout, abbonamento, integrazione pagamento (Stripe)
-9. **Homepage pubblica** — landing page per acquisizione utenti (sostituisce il template default)
+9. ✅ **Homepage pubblica** — landing page per acquisizione utenti (sostituisce il template default)
 
 ## File Onboarding (creati — sessione 2026-04-23)
 
@@ -200,6 +200,18 @@ ALTER TABLE player_profiles ADD COLUMN IF NOT EXISTS team_name TEXT;
 - `/onboarding` presenta il form appropriato per il ruolo; se già completato → redirect dashboard
 - Al submit: INSERT nel profilo ruolo → redirect a `/dashboard`
 - Scout: nessun form, passa direttamente alla dashboard
+
+## File Homepage (creati — sessione 2026-04-29)
+
+| File | Ruolo |
+|---|---|
+| `src/app/page.tsx` | Landing page pubblica — hero, 3 ruoli, come funziona, differenziatori, CTA |
+| `src/lib/supabase/middleware.ts` | Aggiunto `pathname === "/"` a `isPublic` — la root non richiede auth |
+
+### Design homepage
+- Stack: dark `bg-slate-950`, accenti `teal-400`/`teal-500`, card `bg-slate-900`
+- Sezioni: Nav fissa glassmorphism → Hero con glow + mock video card decorative → 3 ruoli → Come funziona (3 step) → Differenziatori (FIGC / 100% / 0€) → CTA finale → Footer
+- Server Component statico (nessun client component)
 
 ## Fix applicati
 
