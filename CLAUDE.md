@@ -150,6 +150,33 @@ Tutte le tabelle hanno **Row Level Security (RLS)** abilitata.
 
 ---
 
+## File Tessera FIGC Coach (sessione 2026-04-29)
+
+| File | Modifica |
+|---|---|
+| `supabase/migrations/20260429000001_coach_figc_verification.sql` | Aggiunge `figc_card_url TEXT` e `is_verified BOOLEAN DEFAULT false` a `coach_profiles`; policy INSERT/UPDATE per bucket `Avatar` |
+| `src/lib/supabase/types.ts` | Aggiunge `figc_card_url` e `is_verified` ai tipi `coach_profiles` |
+| `src/app/actions/onboarding.ts` | `completeCoachOnboarding` legge il file dalla FormData, lo carica su `Avatar` bucket server-side, salva l'URL |
+| `src/app/(app)/onboarding/onboarding-client.tsx` | `CoachOnboarding`: campo upload immagine con anteprima client-side, validazione tipo/size |
+| `src/app/(app)/profile/page.tsx` | Fetcha `coach_profiles.is_verified, figc_card_url`; mostra badge "Verificato FIGC" (teal) o "Verifica in corso" (amber) |
+
+### Flusso verifica coach
+1. Coach completa onboarding → carica foto tessera FIGC (opzionale) → `Avatar` bucket path: `{uid}/figc_card.{ext}`
+2. Profilo coach creato con `is_verified = false`
+3. Il profilo mostra badge **"Verifica in corso"** (amber) se `figc_card_url` presente ma non verificato
+4. Admin imposta manualmente `is_verified = true` su Supabase Dashboard → badge diventa **"Verificato FIGC"** (teal)
+
+### ⚠️ Action manuale richiesta
+Eseguire la migration `20260429000001` su Supabase Dashboard → SQL Editor:
+```sql
+ALTER TABLE coach_profiles
+  ADD COLUMN IF NOT EXISTS figc_card_url TEXT,
+  ADD COLUMN IF NOT EXISTS is_verified BOOLEAN NOT NULL DEFAULT false;
+```
+E aggiungere le policy storage per `Avatar` (vedi file migration completo).
+
+---
+
 ## ⚠️ Azioni Manuali Ancora da Fare
 
 ### 1. ✅ Migration SQL iniziale — eseguita

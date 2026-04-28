@@ -80,6 +80,8 @@ export interface Database {
           figc_license_type: FigcLicenseType | null;
           team_name: string | null;
           city: string | null;
+          figc_card_url: string | null;
+          is_verified: boolean;
         };
         Insert: {
           id: string;
@@ -87,12 +89,16 @@ export interface Database {
           figc_license_type?: FigcLicenseType | null;
           team_name?: string | null;
           city?: string | null;
+          figc_card_url?: string | null;
+          is_verified?: boolean;
         };
         Update: {
           figc_license_number?: string;
           figc_license_type?: FigcLicenseType | null;
           team_name?: string | null;
           city?: string | null;
+          figc_card_url?: string | null;
+          is_verified?: boolean;
         };
         Relationships: [];
       };

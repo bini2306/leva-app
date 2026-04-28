@@ -46,12 +46,30 @@ export async function completeCoachOnboarding(
   const figc_license_number = formData.get("figc_license_number") as string;
   const figc_license_type = formData.get("figc_license_type") as FigcLicenseType | "";
   const team_name = formData.get("team_name") as string;
+  const figcCardFile = formData.get("figc_card") as File | null;
+
+  let figc_card_url: string | null = null;
+
+  if (figcCardFile instanceof File && figcCardFile.size > 0) {
+    const ext = figcCardFile.name.split(".").pop()?.toLowerCase() ?? "jpg";
+    const path = `${user.id}/figc_card.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("Avatar")
+      .upload(path, figcCardFile, { contentType: figcCardFile.type, upsert: true });
+
+    if (uploadError) return { error: `Upload tessera fallito: ${uploadError.message}` };
+
+    figc_card_url = supabase.storage.from("Avatar").getPublicUrl(path).data.publicUrl;
+  }
 
   const { error } = await supabase.from("coach_profiles").insert({
     id: user.id,
     figc_license_number,
     figc_license_type: figc_license_type || null,
     team_name: team_name || null,
+    figc_card_url,
+    is_verified: false,
   });
 
   if (error) return { error: error.message };

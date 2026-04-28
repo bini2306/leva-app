@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState, useEffect, useRef } from "react";
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
 import {
@@ -136,7 +136,36 @@ function CoachOnboarding() {
     completeCoachOnboarding,
     null
   );
+  const [preview, setPreview] = useState<string | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const error = state && "error" in state ? state.error : null;
+
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    setFileError(null);
+    if (!file) { setPreview(null); return; }
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      setFileError("Formato non supportato. Usa JPG, PNG o WebP.");
+      e.target.value = "";
+      setPreview(null);
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setFileError("Il file supera i 5MB.");
+      e.target.value = "";
+      setPreview(null);
+      return;
+    }
+    if (preview) URL.revokeObjectURL(preview);
+    setPreview(URL.createObjectURL(file));
+  };
 
   return (
     <form action={action} className="space-y-5">
@@ -192,6 +221,61 @@ function CoachOnboarding() {
           placeholder="Es. F.C. Juventus Academy"
           className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-leva-accent transition-colors"
         />
+      </div>
+
+      {/* Upload tessera FIGC */}
+      <div>
+        <p className="block text-sm font-medium text-zinc-400 mb-1.5">
+          Foto tessera FIGC{" "}
+          <span className="text-zinc-600 font-normal">(facoltativa)</span>
+        </p>
+        <label
+          htmlFor="figc_card"
+          className="block cursor-pointer"
+        >
+          {preview ? (
+            <div className="relative rounded-xl overflow-hidden bg-zinc-800 border border-zinc-700">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={preview}
+                alt="Anteprima tessera FIGC"
+                className="w-full object-contain max-h-48"
+              />
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                <span className="text-white text-xs font-medium px-3 py-1.5 rounded-lg bg-black/60">
+                  Cambia immagine
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-2 px-4 py-8 rounded-xl bg-zinc-900 border-2 border-dashed border-zinc-700 hover:border-leva-accent/50 transition-colors">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                className="w-8 h-8 text-zinc-500"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+              </svg>
+              <p className="text-sm text-zinc-500">Tocca per caricare la tessera FIGC</p>
+              <p className="text-xs text-zinc-600">JPG · PNG · WebP · max 5MB</p>
+            </div>
+          )}
+          <input
+            ref={fileInputRef}
+            id="figc_card"
+            name="figc_card"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={onFileChange}
+            className="sr-only"
+          />
+        </label>
+        {fileError && (
+          <p className="text-red-400 text-xs mt-1.5">{fileError}</p>
+        )}
       </div>
 
       {error && (
