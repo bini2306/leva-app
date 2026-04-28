@@ -142,7 +142,7 @@ export function CertifyClient({ existingRequest, coachInfo }: Props) {
             rows={4}
             maxLength={500}
             placeholder="Presentati al coach: età, posizione, squadra attuale…"
-            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors resize-none"
+            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-leva-accent transition-colors resize-none"
           />
         </div>
 
@@ -163,7 +163,7 @@ export function CertifyClient({ existingRequest, coachInfo }: Props) {
           <button
             onClick={onSubmitRequest}
             disabled={isPending}
-            className="flex-1 py-3 bg-green-500 hover:bg-green-400 disabled:opacity-40 text-black font-bold rounded-xl transition-colors"
+            className="flex-1 py-3 bg-leva-accent hover:bg-leva-accent/80 disabled:opacity-40 text-black font-bold rounded-xl transition-colors"
           >
             {isPending ? "Invio…" : "Invia richiesta"}
           </button>
@@ -194,7 +194,7 @@ export function CertifyClient({ existingRequest, coachInfo }: Props) {
           value={query}
           onChange={(e) => onSearch(e.target.value)}
           placeholder="Nome o numero licenza FIGC"
-          className="w-full pl-12 pr-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors"
+          className="w-full pl-12 pr-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-leva-accent transition-colors"
           autoFocus
         />
       </div>
@@ -283,9 +283,9 @@ function StatusCard({
       hint: "Il coach riceverà una notifica. Appena risponde, il tuo profilo verrà aggiornato.",
     },
     approved: {
-      card: "bg-green-500/10 border-green-500/30",
-      dot: "bg-green-400",
-      text: "text-green-300",
+      card: "bg-leva-accent/10 border-leva-accent/30",
+      dot: "bg-leva-accent",
+      text: "text-leva-accent",
       title: "Profilo verificato",
       hint: "Il tuo profilo è stato certificato dal coach. Ora comparirà col badge FIGC agli scout.",
     },

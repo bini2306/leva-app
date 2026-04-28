@@ -143,7 +143,7 @@ export default function UploadPage() {
       : "Caricamento video…";
 
   return (
-    <div className="min-h-[100dvh] bg-zinc-950 px-6 py-8">
+    <div className="min-h-[100dvh] bg-leva-bg px-6 py-8">
       <div className="flex items-center justify-between mb-8">
         <Link
           href="/feed"
@@ -225,7 +225,7 @@ export default function UploadPage() {
             required
             maxLength={80}
             placeholder="Es: Doppietta contro il Milan U17"
-            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors disabled:opacity-50"
+            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-leva-accent transition-colors disabled:opacity-50"
           />
         </div>
 
@@ -245,7 +245,7 @@ export default function UploadPage() {
             rows={3}
             maxLength={280}
             placeholder="Racconta il contesto della giocata…"
-            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors resize-none disabled:opacity-50"
+            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-leva-accent transition-colors resize-none disabled:opacity-50"
           />
         </div>
 
@@ -259,7 +259,7 @@ export default function UploadPage() {
           <div className="space-y-2">
             <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
               <div
-                className="h-full bg-green-500 transition-all duration-300 ease-out"
+                className="h-full bg-leva-accent transition-all duration-300 ease-out"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -270,7 +270,7 @@ export default function UploadPage() {
         <button
           type="submit"
           disabled={uploading || !file}
-          className="w-full py-3.5 bg-green-500 hover:bg-green-400 disabled:opacity-40 disabled:cursor-not-allowed text-black font-bold rounded-xl transition-colors"
+          className="w-full py-3.5 bg-leva-accent hover:bg-leva-accent/80 disabled:opacity-40 disabled:cursor-not-allowed text-black font-bold rounded-xl transition-colors"
         >
           {uploading ? "Caricamento in corso…" : "Pubblica"}
         </button>

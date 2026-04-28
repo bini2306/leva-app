@@ -87,7 +87,7 @@ export default async function ProfilePage() {
   const initial = profile.full_name?.[0]?.toUpperCase() ?? "?";
 
   return (
-    <div className="min-h-[100dvh] bg-zinc-950 pb-28">
+    <div className="min-h-[100dvh] bg-leva-bg pb-28">
       <header className="flex items-center justify-between px-6 py-5 border-b border-zinc-900">
         <Link
           href="/feed"
@@ -103,7 +103,7 @@ export default async function ProfilePage() {
       </header>
 
       <section className="px-6 py-8 flex flex-col items-center text-center">
-        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-green-500 to-emerald-700 flex items-center justify-center text-black text-3xl font-bold mb-4 overflow-hidden">
+        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-leva-accent to-leva-accent/60 flex items-center justify-center text-black text-3xl font-bold mb-4 overflow-hidden">
           {profile.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -123,7 +123,7 @@ export default async function ProfilePage() {
             {ROLE_LABEL[profile.role] ?? profile.role}
           </span>
           {isPlayer && playerProfile?.is_verified && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-500/20 border border-green-500/40 text-green-300 text-xs font-medium rounded-full">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-leva-accent/20 border border-leva-accent/40 text-leva-accent text-xs font-medium rounded-full">
               <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3">
                 <path fillRule="evenodd" d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clipRule="evenodd" />
               </svg>
@@ -153,10 +153,10 @@ export default async function ProfilePage() {
         <section className="px-6 pb-6">
           <Link
             href="/coach"
-            className="flex items-center gap-3 bg-gradient-to-br from-green-500/15 to-emerald-700/10 border border-green-500/30 rounded-xl p-4 hover:border-green-500/60 transition-colors"
+            className="flex items-center gap-3 bg-gradient-to-br from-leva-accent/15 to-leva-accent/5 border border-leva-accent/30 rounded-xl p-4 hover:border-leva-accent/60 transition-colors"
           >
-            <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5 text-green-300">
+            <div className="w-10 h-10 rounded-full bg-leva-accent/20 flex items-center justify-center shrink-0">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5 text-leva-accent">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
               </svg>
             </div>
@@ -177,10 +177,10 @@ export default async function ProfilePage() {
         <section className="px-6 pb-6">
           <Link
             href="/certify"
-            className="flex items-center gap-3 bg-gradient-to-br from-green-500/15 to-emerald-700/10 border border-green-500/30 rounded-xl p-4 hover:border-green-500/60 transition-colors"
+            className="flex items-center gap-3 bg-gradient-to-br from-leva-accent/15 to-leva-accent/5 border border-leva-accent/30 rounded-xl p-4 hover:border-leva-accent/60 transition-colors"
           >
-            <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5 text-green-300">
+            <div className="w-10 h-10 rounded-full bg-leva-accent/20 flex items-center justify-center shrink-0">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5 text-leva-accent">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
               </svg>
             </div>
@@ -218,7 +218,7 @@ export default async function ProfilePage() {
             <h3 className="text-white font-semibold">I tuoi video</h3>
             <Link
               href="/upload"
-              className="text-green-400 text-sm font-medium hover:text-green-300"
+              className="text-leva-accent text-sm font-medium hover:text-leva-accent/80"
             >
               + Nuovo
             </Link>
@@ -240,14 +240,14 @@ export default async function ProfilePage() {
         </Link>
         <Link
           href="/upload"
-          className="w-12 h-12 rounded-xl bg-green-500 hover:bg-green-400 text-black flex items-center justify-center transition-colors"
+          className="w-12 h-12 rounded-xl bg-leva-accent hover:bg-leva-accent/80 text-black flex items-center justify-center transition-colors"
           aria-label="Carica video"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
         </Link>
-        <span className="text-green-400 flex flex-col items-center gap-1 text-xs font-medium">
+        <span className="text-leva-accent flex flex-col items-center gap-1 text-xs font-medium">
           <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
             <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clipRule="evenodd" />
           </svg>

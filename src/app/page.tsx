@@ -2,11 +2,11 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen bg-leva-bg text-white">
       {/* NAV */}
-      <nav className="fixed top-0 inset-x-0 z-50 border-b border-slate-800/60 backdrop-blur-md bg-slate-950/80">
+      <nav className="fixed top-0 inset-x-0 z-50 border-b border-slate-800/60 backdrop-blur-md bg-leva-bg/80">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <span className="text-teal-400 font-black text-xl tracking-tight">
+          <span className="text-leva-accent font-black text-xl tracking-tight">
             LEVA
           </span>
           <div className="flex items-center gap-3">
@@ -18,7 +18,7 @@ export default function HomePage() {
             </Link>
             <Link
               href="/signup"
-              className="px-4 py-2 text-sm font-bold bg-teal-500 hover:bg-teal-400 text-slate-950 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-bold bg-leva-accent hover:bg-leva-accent/80 text-slate-950 rounded-lg transition-colors"
             >
               Registrati
             </Link>
@@ -34,19 +34,19 @@ export default function HomePage() {
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse 80% 50% at 50% -10%, rgba(20,184,166,0.18) 0%, transparent 70%)",
+              "radial-gradient(ellipse 80% 50% at 50% -10%, rgba(30,201,154,0.18) 0%, transparent 70%)",
           }}
         />
 
         <div className="relative max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-semibold tracking-wide mb-8">
-            <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-leva-accent/10 border border-leva-accent/20 text-leva-accent text-xs font-semibold tracking-wide mb-8">
+            <span className="w-1.5 h-1.5 rounded-full bg-leva-accent animate-pulse" />
             PIATTAFORMA DI SCOUTING CALCISTICO
           </div>
 
           <h1 className="text-5xl sm:text-6xl font-black tracking-tight leading-tight mb-6">
             Il talento{" "}
-            <span className="text-teal-400">non ha provincia</span>
+            <span className="text-leva-accent">non ha provincia</span>
           </h1>
 
           <p className="text-lg sm:text-xl text-slate-400 max-w-xl mx-auto leading-relaxed mb-10">
@@ -58,7 +58,7 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/signup"
-              className="w-full sm:w-auto px-8 py-4 bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-base rounded-xl transition-colors"
+              className="w-full sm:w-auto px-8 py-4 bg-leva-accent hover:bg-leva-accent/80 text-slate-950 font-bold text-base rounded-xl transition-colors"
             >
               Inizia gratis
             </Link>
@@ -98,14 +98,14 @@ export default function HomePage() {
                 <span
                   className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                     card.badge === "VERIFICATO"
-                      ? "bg-teal-500/20 text-teal-400 border border-teal-500/30"
+                      ? "bg-leva-accent/20 text-leva-accent border border-leva-accent/30"
                       : "bg-slate-700/60 text-slate-400 border border-slate-600/40"
                   }`}
                 >
                   {card.badge}
                 </span>
               </div>
-              <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-slate-950 to-transparent">
+              <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-leva-bg to-transparent">
                 <div className="w-16 h-2 rounded-full bg-slate-700 mb-1.5" />
                 <div className="w-10 h-1.5 rounded-full bg-slate-800" />
               </div>
@@ -127,8 +127,8 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="rounded-2xl bg-slate-900 border border-slate-800 p-8 flex flex-col gap-5 hover:border-teal-500/40 transition-colors">
-              <div className="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-2xl">
+            <div className="rounded-2xl bg-slate-900 border border-slate-800 p-8 flex flex-col gap-5 hover:border-leva-accent/40 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-leva-accent/10 border border-leva-accent/20 flex items-center justify-center text-2xl">
                 ⚽
               </div>
               <div>
@@ -140,13 +140,13 @@ export default function HomePage() {
                 </p>
               </div>
               <div className="mt-auto pt-4 border-t border-slate-800">
-                <span className="text-teal-400 font-bold text-sm">Gratis</span>
+                <span className="text-leva-accent font-bold text-sm">Gratis</span>
                 <span className="text-slate-500 text-sm"> — sempre</span>
               </div>
             </div>
 
-            <div className="rounded-2xl bg-slate-900 border border-slate-800 p-8 flex flex-col gap-5 hover:border-teal-500/40 transition-colors">
-              <div className="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-2xl">
+            <div className="rounded-2xl bg-slate-900 border border-slate-800 p-8 flex flex-col gap-5 hover:border-leva-accent/40 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-leva-accent/10 border border-leva-accent/20 flex items-center justify-center text-2xl">
                 📋
               </div>
               <div>
@@ -158,15 +158,15 @@ export default function HomePage() {
                 </p>
               </div>
               <div className="mt-auto pt-4 border-t border-slate-800">
-                <span className="text-teal-400 font-bold text-sm">Gratis</span>
+                <span className="text-leva-accent font-bold text-sm">Gratis</span>
                 <span className="text-slate-500 text-sm">
                   {" "}— richiede licenza FIGC
                 </span>
               </div>
             </div>
 
-            <div className="rounded-2xl bg-slate-900 border border-slate-800 p-8 flex flex-col gap-5 hover:border-teal-500/40 transition-colors">
-              <div className="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-2xl">
+            <div className="rounded-2xl bg-slate-900 border border-slate-800 p-8 flex flex-col gap-5 hover:border-leva-accent/40 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-leva-accent/10 border border-leva-accent/20 flex items-center justify-center text-2xl">
                 🔍
               </div>
               <div>
@@ -178,7 +178,7 @@ export default function HomePage() {
                 </p>
               </div>
               <div className="mt-auto pt-4 border-t border-slate-800">
-                <span className="text-teal-400 font-bold text-sm">Premium</span>
+                <span className="text-leva-accent font-bold text-sm">Premium</span>
                 <span className="text-slate-500 text-sm">
                   {" "}— abbonamento mensile
                 </span>
@@ -222,7 +222,7 @@ export default function HomePage() {
                 key={step.n}
                 className="flex gap-6 p-6 rounded-2xl bg-slate-900 border border-slate-800"
               >
-                <span className="text-3xl font-black text-teal-500/30 tabular-nums leading-none pt-1 flex-shrink-0 w-10">
+                <span className="text-3xl font-black text-leva-accent/30 tabular-nums leading-none pt-1 flex-shrink-0 w-10">
                   {step.n}
                 </span>
                 <div>
@@ -259,7 +259,7 @@ export default function HomePage() {
               },
             ].map((stat) => (
               <div key={stat.value} className="flex flex-col gap-2">
-                <span className="text-5xl font-black text-teal-400">
+                <span className="text-5xl font-black text-leva-accent">
                   {stat.value}
                 </span>
                 <span className="text-white font-bold">{stat.label}</span>
@@ -277,20 +277,20 @@ export default function HomePage() {
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse 60% 50% at 50% 100%, rgba(20,184,166,0.1) 0%, transparent 70%)",
+              "radial-gradient(ellipse 60% 50% at 50% 100%, rgba(30,201,154,0.1) 0%, transparent 70%)",
           }}
         />
         <div className="relative max-w-2xl mx-auto text-center">
           <h2 className="text-4xl sm:text-5xl font-black mb-6">
             Il tuo talento{" "}
-            <span className="text-teal-400">merita visibilità</span>
+            <span className="text-leva-accent">merita visibilità</span>
           </h2>
           <p className="text-slate-400 text-lg mb-10 leading-relaxed">
             Registrati ora. È gratis per i giocatori e per gli allenatori FIGC.
           </p>
           <Link
             href="/signup"
-            className="inline-block px-10 py-4 bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-lg rounded-xl transition-colors"
+            className="inline-block px-10 py-4 bg-leva-accent hover:bg-leva-accent/80 text-slate-950 font-bold text-lg rounded-xl transition-colors"
           >
             Crea il tuo profilo
           </Link>
@@ -300,7 +300,7 @@ export default function HomePage() {
       {/* FOOTER */}
       <footer className="border-t border-slate-900 py-10 px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="text-teal-400 font-black tracking-tight">LEVA</span>
+          <span className="text-leva-accent font-black tracking-tight">LEVA</span>
           <p className="text-slate-600 text-sm">
             © 2026 Leva. Tutti i diritti riservati.
           </p>

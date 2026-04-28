@@ -52,7 +52,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="w-full py-3.5 bg-green-500 hover:bg-green-400 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold rounded-xl transition-colors text-base"
+      className="w-full py-3.5 bg-leva-accent hover:bg-leva-accent/80 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold rounded-xl transition-colors text-base"
     >
       {pending ? "Registrazione in corso…" : "Crea account"}
     </button>
@@ -63,9 +63,9 @@ function RoleSelection({ onSelect }: { onSelect: (role: UserRole) => void }) {
   const [selected, setSelected] = useState<UserRole | null>(null);
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col px-6 py-12">
+    <div className="min-h-screen bg-leva-bg flex flex-col px-6 py-12">
       <div className="mb-8">
-        <span className="text-green-500 font-black text-2xl tracking-tight">
+        <span className="text-leva-accent font-black text-2xl tracking-tight">
           LEVA
         </span>
         <h1 className="text-3xl font-bold text-white mt-6">Chi sei?</h1>
@@ -82,14 +82,14 @@ function RoleSelection({ onSelect }: { onSelect: (role: UserRole) => void }) {
               onClick={() => setSelected(role.value)}
               className={`w-full text-left flex items-center gap-4 px-5 py-4 rounded-2xl border transition-all ${
                 isSelected
-                  ? "border-green-500 bg-green-500/10"
+                  ? "border-leva-accent bg-leva-accent/10"
                   : "border-zinc-800 bg-zinc-900 hover:border-zinc-700"
               }`}
             >
               <div
                 className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${
                   isSelected
-                    ? "bg-green-500 text-black"
+                    ? "bg-leva-accent text-black"
                     : "bg-zinc-800 text-zinc-400"
                 }`}
               >
@@ -113,7 +113,7 @@ function RoleSelection({ onSelect }: { onSelect: (role: UserRole) => void }) {
           type="button"
           disabled={!selected}
           onClick={() => selected && onSelect(selected)}
-          className="w-full py-3.5 bg-green-500 hover:bg-green-400 disabled:opacity-30 disabled:cursor-not-allowed text-black font-bold rounded-xl transition-colors text-base"
+          className="w-full py-3.5 bg-leva-accent hover:bg-leva-accent/80 disabled:opacity-30 disabled:cursor-not-allowed text-black font-bold rounded-xl transition-colors text-base"
         >
           Continua
         </button>
@@ -122,7 +122,7 @@ function RoleSelection({ onSelect }: { onSelect: (role: UserRole) => void }) {
           Hai già un account?{" "}
           <Link
             href="/login"
-            className="text-green-400 font-semibold hover:text-green-300 transition-colors"
+            className="text-leva-accent font-semibold hover:text-leva-accent/80 transition-colors"
           >
             Accedi
           </Link>
@@ -147,7 +147,7 @@ function SignupForm({
   const error = state && "error" in state ? state.error : null;
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col px-6 py-12">
+    <div className="min-h-screen bg-leva-bg flex flex-col px-6 py-12">
       <div className="mb-8">
         <button
           type="button"
@@ -160,13 +160,13 @@ function SignupForm({
           Cambia ruolo
         </button>
 
-        <span className="text-green-500 font-black text-2xl tracking-tight">
+        <span className="text-leva-accent font-black text-2xl tracking-tight">
           LEVA
         </span>
         <h1 className="text-3xl font-bold text-white mt-6">Crea account</h1>
         <p className="text-zinc-400 mt-2">
           Registrati come{" "}
-          <span className="text-green-400 font-medium">{roleLabel}</span>
+          <span className="text-leva-accent font-medium">{roleLabel}</span>
         </p>
       </div>
 
@@ -187,7 +187,7 @@ function SignupForm({
             required
             autoComplete="name"
             placeholder="Mario Rossi"
-            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors"
+            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-leva-accent transition-colors"
           />
         </div>
 
@@ -205,7 +205,7 @@ function SignupForm({
             required
             autoComplete="email"
             placeholder="la-tua@email.com"
-            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors"
+            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-leva-accent transition-colors"
           />
         </div>
 
@@ -224,7 +224,7 @@ function SignupForm({
             autoComplete="new-password"
             placeholder="Minimo 8 caratteri"
             minLength={8}
-            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors"
+            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-leva-accent transition-colors"
           />
         </div>
 
@@ -243,7 +243,7 @@ function SignupForm({
         Hai già un account?{" "}
         <Link
           href="/login"
-          className="text-green-400 font-semibold hover:text-green-300 transition-colors"
+          className="text-leva-accent font-semibold hover:text-leva-accent/80 transition-colors"
         >
           Accedi
         </Link>
@@ -254,9 +254,9 @@ function SignupForm({
 
 function CheckEmail() {
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col justify-center items-center px-6 text-center">
-      <div className="w-16 h-16 bg-green-500/15 rounded-full flex items-center justify-center mb-6">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8 text-green-400">
+    <div className="min-h-screen bg-leva-bg flex flex-col justify-center items-center px-6 text-center">
+      <div className="w-16 h-16 bg-leva-accent/15 rounded-full flex items-center justify-center mb-6">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8 text-leva-accent">
           <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
         </svg>
       </div>
@@ -267,7 +267,7 @@ function CheckEmail() {
       </p>
       <Link
         href="/login"
-        className="mt-8 text-green-400 font-semibold hover:text-green-300 transition-colors text-sm"
+        className="mt-8 text-leva-accent font-semibold hover:text-leva-accent/80 transition-colors text-sm"
       >
         Torna al login
       </Link>

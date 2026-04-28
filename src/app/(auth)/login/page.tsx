@@ -12,7 +12,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="w-full py-3.5 bg-green-500 hover:bg-green-400 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold rounded-xl transition-colors text-base"
+      className="w-full py-3.5 bg-leva-accent hover:bg-leva-accent/80 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold rounded-xl transition-colors text-base"
     >
       {pending ? "Accesso in corso…" : "Accedi"}
     </button>
@@ -24,9 +24,9 @@ export default function LoginPage() {
   const error = state && "error" in state ? state.error : null;
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col justify-center px-6 py-12">
+    <div className="min-h-screen bg-leva-bg flex flex-col justify-center px-6 py-12">
       <div className="mb-10">
-        <span className="text-green-500 font-black text-2xl tracking-tight">
+        <span className="text-leva-accent font-black text-2xl tracking-tight">
           LEVA
         </span>
         <h1 className="text-3xl font-bold text-white mt-6">Bentornato</h1>
@@ -48,7 +48,7 @@ export default function LoginPage() {
             required
             autoComplete="email"
             placeholder="la-tua@email.com"
-            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors"
+            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-leva-accent transition-colors"
           />
         </div>
 
@@ -66,7 +66,7 @@ export default function LoginPage() {
             required
             autoComplete="current-password"
             placeholder="••••••••"
-            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors"
+            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-leva-accent transition-colors"
           />
         </div>
 
@@ -85,7 +85,7 @@ export default function LoginPage() {
         Non hai un account?{" "}
         <Link
           href="/signup"
-          className="text-green-400 font-semibold hover:text-green-300 transition-colors"
+          className="text-leva-accent font-semibold hover:text-leva-accent/80 transition-colors"
         >
           Registrati
         </Link>

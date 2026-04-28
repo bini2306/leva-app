@@ -53,7 +53,7 @@ export function RequestCard({
   return (
     <div className="bg-zinc-900 rounded-2xl p-5 space-y-4">
       <div className="flex items-start gap-3">
-        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-emerald-700 flex items-center justify-center text-black font-bold overflow-hidden shrink-0">
+        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-leva-accent to-leva-accent/60 flex items-center justify-center text-black font-bold overflow-hidden shrink-0">
           {avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={avatarUrl} alt={playerName} className="w-full h-full object-cover" />
@@ -116,7 +116,7 @@ export function RequestCard({
           <button
             onClick={onApprove}
             disabled={isPending}
-            className="flex-1 py-2.5 bg-green-500 hover:bg-green-400 disabled:opacity-40 text-black font-bold rounded-xl transition-colors"
+            className="flex-1 py-2.5 bg-leva-accent hover:bg-leva-accent/80 disabled:opacity-40 text-black font-bold rounded-xl transition-colors"
           >
             {isPending ? "…" : "Approva"}
           </button>
@@ -162,7 +162,7 @@ export function RequestCard({
 function StatusPill({ status }: { status: "pending" | "approved" | "rejected" }) {
   const config = {
     pending: { label: "In attesa", cls: "bg-amber-500/20 text-amber-300 border-amber-500/30" },
-    approved: { label: "Approvata", cls: "bg-green-500/20 text-green-300 border-green-500/30" },
+    approved: { label: "Approvata", cls: "bg-leva-accent/20 text-leva-accent border-leva-accent/30" },
     rejected: { label: "Rifiutata", cls: "bg-red-500/20 text-red-300 border-red-500/30" },
   }[status];
   return (

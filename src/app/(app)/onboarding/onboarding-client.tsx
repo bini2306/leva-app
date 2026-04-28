@@ -30,7 +30,7 @@ function SubmitButton({ label }: { label: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="w-full py-3.5 bg-green-500 hover:bg-green-400 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold rounded-xl transition-colors text-base"
+      className="w-full py-3.5 bg-leva-accent hover:bg-leva-accent/80 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold rounded-xl transition-colors text-base"
     >
       {pending ? "Salvataggio in corso…" : label}
     </button>
@@ -58,7 +58,7 @@ function PlayerOnboarding() {
           name="birth_date"
           type="date"
           required
-          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-green-500 transition-colors"
+          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-leva-accent transition-colors"
         />
       </div>
 
@@ -73,7 +73,7 @@ function PlayerOnboarding() {
           id="position"
           name="position"
           required
-          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-green-500 transition-colors appearance-none"
+          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-leva-accent transition-colors appearance-none"
         >
           <option value="">Seleziona ruolo</option>
           {POSITIONS.map((p) => (
@@ -96,7 +96,7 @@ function PlayerOnboarding() {
           name="team_name"
           type="text"
           placeholder="Es. A.C. Milan Giovanili"
-          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors"
+          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-leva-accent transition-colors"
         />
       </div>
 
@@ -112,7 +112,7 @@ function PlayerOnboarding() {
           name="city"
           type="text"
           placeholder="Es. Milano"
-          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors"
+          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-leva-accent transition-colors"
         />
       </div>
 
@@ -151,7 +151,7 @@ function CoachOnboarding() {
           type="text"
           required
           placeholder="Es. 123456"
-          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors"
+          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-leva-accent transition-colors"
         />
       </div>
 
@@ -165,7 +165,7 @@ function CoachOnboarding() {
         <select
           id="figc_license_type"
           name="figc_license_type"
-          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-green-500 transition-colors appearance-none"
+          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-leva-accent transition-colors appearance-none"
         >
           <option value="">Seleziona tipo</option>
           {LICENSE_TYPES.map((l) => (
@@ -188,7 +188,7 @@ function CoachOnboarding() {
           name="team_name"
           type="text"
           placeholder="Es. F.C. Juventus Academy"
-          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-green-500 transition-colors"
+          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-leva-accent transition-colors"
         />
       </div>
 
@@ -209,13 +209,13 @@ export default function OnboardingClient({ role }: { role: UserRole }) {
   const isPlayer = role === "player";
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col px-6 py-12">
+    <div className="min-h-screen bg-leva-bg flex flex-col px-6 py-12">
       <div className="mb-8">
-        <span className="text-green-500 font-black text-2xl tracking-tight">
+        <span className="text-leva-accent font-black text-2xl tracking-tight">
           LEVA
         </span>
         <div className="mt-6">
-          <span className="inline-block px-3 py-1 bg-green-500/15 text-green-400 text-xs font-medium rounded-full mb-4">
+          <span className="inline-block px-3 py-1 bg-leva-accent/15 text-leva-accent text-xs font-medium rounded-full mb-4">
             {isPlayer ? "Giocatore" : "Allenatore FIGC"}
           </span>
           <h1 className="text-3xl font-bold text-white">Completa il profilo</h1>

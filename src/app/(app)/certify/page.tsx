@@ -59,7 +59,7 @@ export default async function CertifyPage() {
   }
 
   return (
-    <div className="min-h-[100dvh] bg-zinc-950 pb-20">
+    <div className="min-h-[100dvh] bg-leva-bg pb-20">
       <header className="flex items-center justify-between px-6 py-5 border-b border-zinc-900">
         <Link
           href="/profile"

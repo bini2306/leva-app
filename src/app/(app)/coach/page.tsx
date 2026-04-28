@@ -49,7 +49,7 @@ export default async function CoachDashboardPage() {
   const reviewed = (requests ?? []).filter((r) => r.status !== "pending");
 
   return (
-    <div className="min-h-[100dvh] bg-zinc-950 pb-20">
+    <div className="min-h-[100dvh] bg-leva-bg pb-20">
       <header className="flex items-center justify-between px-6 py-5 border-b border-zinc-900">
         <div>
           <p className="text-zinc-500 text-xs uppercase tracking-wide">
