@@ -2,11 +2,13 @@
 
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
+import Link from "next/link";
 import {
   completePlayerOnboarding,
   completeCoachOnboarding,
   type OnboardingState,
 } from "@/app/actions/onboarding";
+import { logout } from "@/app/actions/auth";
 import type { UserRole, PlayerPosition, FigcLicenseType } from "@/lib/supabase/types";
 
 const POSITIONS: { value: PlayerPosition; label: string }[] = [
@@ -228,6 +230,18 @@ export default function OnboardingClient({ role }: { role: UserRole }) {
       </div>
 
       {isPlayer ? <PlayerOnboarding /> : <CoachOnboarding />}
+
+      <p className="mt-8 text-center text-zinc-500 text-sm">
+        Account sbagliato?{" "}
+        <form action={logout} className="inline">
+          <button
+            type="submit"
+            className="text-leva-accent font-semibold hover:text-leva-accent/80 transition-colors"
+          >
+            Accedi
+          </button>
+        </form>
+      </p>
     </div>
   );
 }
